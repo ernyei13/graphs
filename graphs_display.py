@@ -6,8 +6,9 @@ pygame.init()
 
 red = (255,0,0)	
 idk = (255,255,0)	
+font_1 = pygame.font.SysFont('Courier New', 15)
 
-def findPath(s, b, graphit):
+def findPathSimple(s, b, graph):
     visited = {s}
     stack= [s]
     path = []  
@@ -15,7 +16,7 @@ def findPath(s, b, graphit):
     while stack != []:
         top = stack[-1]
         path = [*path, top]
-        neighboursOfTop  =  graphit[top]
+        neighboursOfTop  =  graph[top]
         if b in  neighboursOfTop:
             return path + [b]
         neighboursToCheck = [x for x in neighboursOfTop if x not in visited]
@@ -26,6 +27,7 @@ def findPath(s, b, graphit):
             visited = {*visited, nextTop}
         else:
             stack = stack[:-1]
+            
             path = path[:-2]     
     return  None
 	
@@ -42,8 +44,12 @@ def createGraph(p):
 				connected[c].append(a)
 	return connected
 
-		
-	
+
+
+
+
+
+
 	
 
 screenwidth = 800
@@ -62,10 +68,12 @@ class vertices(pygame.sprite.Sprite):
 	def display(self, color):
 		screen = gameDisplay
 		pygame.draw.circle(screen, color, (self.x, self.y), self.size, self.thickness)
+		this_sentence=font_1.render((str(self.num)),True,(255,255,255))
+		screen.blit(this_sentence, (self.x,self.y -30))
 	def __str__(self):
 		return "x:{} y:{}".format(self.x, self.y)
 
-graph = createGraph(6)
+graph = createGraph(15)
 
 a = 2*pi / len(graph)
 r = 150
@@ -80,7 +88,7 @@ for q in range(len(graph)):
 
 	
 	
-font_1 = pygame.font.SysFont('Courier New', 15)
+
 	
 all_verts = pygame.sprite.Group()
 clock = pygame.time.Clock()
@@ -98,23 +106,24 @@ while run:
 		for u in graph[e]:
 			pygame.draw.line(gameDisplay, (255,0,0), [verts[e].x, verts[e].y], [verts[u].x, verts[u].y], 2)
 	
-	
-	o = findPath(0, 3, graph) 
+
+	o = findPathSimple(1, 3, graph) 
 	print(o)
 	try:
 		if o != None:
-			verts[o[cnt]].display(idk)
+			verts[o[0]].display((0,255,0))
+			verts[o[-1]].display((0,255,0))
+			pygame.draw.line(gameDisplay, (0,255,0), [verts[o[cnt]].x, verts[o[cnt]].y], [verts[o[cnt+1]].x, verts[o[cnt+1]].y], 2)
+			verts[o[cnt]].display((0,255,0))
 			
 		else:
 			this_sentence=font_1.render(("nincs lehetoseg"),True,(255,255,255))
 			gameDisplay.blit(this_sentence,(10,10))
+	
+		cnt += 1
 	except IndexError:
 		cnt = 0
-	#findpath nem jo valszeg
-		
-	cnt += 1
-		
 	
-	pygame.time.wait(200)
+	pygame.time.wait(500)
 	pygame.display.flip()
 	clock = pygame.time.Clock()
