@@ -94,12 +94,41 @@ all_verts = pygame.sprite.Group()
 clock = pygame.time.Clock()
 run = True
 cnt = 0
+szinek = 0
+a = 0
 while run:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			run = False
-	gameDisplay.fill((0,0,255))
 	
+	if a == 1:
+		szinek -=5
+	elif a == 0:
+		szinek += 5
+
+	
+	
+	if szinek >= 255:
+		a = 1
+	elif szinek <= 0:
+		a = 0
+
+
+	if a == 1:
+		szinek -=5
+	elif a == 0:
+		szinek += 5
+
+	gameDisplay.fill((szinek,0,255-szinek))
+
+
+
+
+	if szinek >= 255:
+		a = 1
+	if szinek <= 0:
+		a = 0
+
 	for v in verts:
 		v.display(red)
 	for e in range(len(verts)):
@@ -124,6 +153,6 @@ while run:
 	except IndexError:
 		cnt = 0
 	
-	pygame.time.wait(500)
+	pygame.time.wait(400)
 	pygame.display.flip()
 	clock = pygame.time.Clock()
