@@ -14,7 +14,7 @@ from pygame.locals import (
 )
 
 
-pygame.init()
+
 screenwidth = 800
 screenheight = 600
 
@@ -35,8 +35,8 @@ class vertices(pygame.sprite.Sprite):
 		return "x:{} y:{}".format(self.x, self.y)
 
 
-multBy = 2
-dots = 100	
+multBy = 99
+dots = 200
 
 
 def mults(multBy, dots):
@@ -62,8 +62,7 @@ def mults(multBy, dots):
 	return [verts, connect, graph]
 		
 
-font_1 = pygame.font.SysFont('Courier New', 15)
-                             #(font name,size)
+
 	
 all_verts = pygame.sprite.Group()
 clock = pygame.time.Clock()
@@ -74,7 +73,6 @@ while run:
 		if event.type == pygame.QUIT:
 			run = False
 		if event.type == KEYDOWN:
-            # Was it the Escape key? If so, stop the loop
 			if event.key == K_SPACE:
 				seb = 0
 			if event.key == K_UP:
@@ -89,14 +87,7 @@ while run:
 				multBy = 0
 			
 	gameDisplay.fill((0,0,255))
-	
-	
-	this_sentence=font_1.render("mult by: {}".format(multBy),True,(255,255,255))
-	gameDisplay.blit(this_sentence,(10,10))
-	this_sentence=font_1.render("dots: {}".format(dots),True,(255,255,255))
-	gameDisplay.blit(this_sentence,(10,30))
-	this_sentence=font_1.render("sebesseg: {}".format(seb),True,(255,255,255))
-	gameDisplay.blit(this_sentence,(10,50))
+
 	verts = mults(multBy, dots)[0]
 	graph = mults(multBy, dots)[2]
 	
@@ -107,10 +98,8 @@ while run:
 	
 	for e in range(len(verts)):
 		e = int(round(e, 0))
-		print(e)
 		for u in graph[e]:
 			u = int(round(u, 0))
-			print(u)
 			if u == dots:
 				u = 0
 			pygame.draw.line(gameDisplay, (255,0,0), [verts[e].x, verts[e].y], [verts[u].x, verts[u].y], 2)
